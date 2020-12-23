@@ -1,10 +1,15 @@
-from Utilities.SaveSets import SaveSets
+from SaveSets import SaveSets
+#TODO: Finish the teach word function and improve mastery system
 class Set:
     def __init__(self, setName):
         self.setName = setName
         self.data = []
         self.connections = []
         self.connectionInitialized = False
+        self.mastery = [0 for x in range(self.dataLength)]
+        #self.masateryBool = False
+        self.masteryOrdered = []
+
     def initializeData(self):
         self.vocabInput = 0
         while self.vocabInput != '9999':
@@ -21,6 +26,10 @@ class Set:
         if self.saveBool == "y":
             saver = SaveSets("C:\Code\Python\Mem-O-Rise\Data\Sets.txt", self.getData(), self.getConnections(), self.setName)  
             saver.saveSet()
+
+    def teachWord(self, word):
+        wordIndex = self.data.index(word)
+        masteryForWord = self.mastery[wordIndex]
 
     def getData(self):
         return self.data
@@ -40,6 +49,14 @@ class Set:
         self.connections = [0 for x in range(self.dataLength)]
         self.connectionInitialized = True   
 
+    def orderByMastery(self):
+        self.masteryOrdered = [x for _,x in sorted(zip(self.mastery, self.data))]
+
     def addConnection(self, word, connection):
         index = self.data.index(word)
         self.connections[index] = connection
+
+    def learnSet(self):
+        for vocabWord in self.masteryOrdered:
+            self.teachWord()
+
