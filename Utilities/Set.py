@@ -1,5 +1,7 @@
 from SaveSets import SaveSets
-#TODO: Finish the teach word function and improve mastery system
+#TODO: learn set has to take 3 at a time
+
+
 class Set:
     def __init__(self, setName):
         self.setName = setName
@@ -27,9 +29,23 @@ class Set:
             saver = SaveSets("C:\Code\Python\Mem-O-Rise\Data\Sets.txt", self.getData(), self.getConnections(), self.setName)  
             saver.saveSet()
 
-    def teachWord(self, word):
+    def teachWord(self, word, word2, word3):
         wordIndex = self.data.index(word)
         masteryForWord = self.mastery[wordIndex]
+
+        wordIndex2 = self.data.index(word2)
+        masteryForWord2 = self.mastery[wordIndex2]
+
+        wordIndex3 = self.data.index(word3)
+        masteryForWord3 = self.mastery[wordIndex3]s
+
+        averageMastery = (masteryForWord + masteryForWord2 + masteryForWord3) / 3
+        if averageMastery < 10:
+            self.writeVocabWord(word)
+            self.writeVocabWord(word2)
+            self.writeVocabWord(word3)
+
+            self.mastery[wordIndex] += 5
 
     def getData(self):
         return self.data
@@ -57,6 +73,21 @@ class Set:
         self.connections[index] = connection
 
     def learnSet(self):
-        for vocabWord in self.masteryOrdered:
-            self.teachWord()
+        for vocabWord in self.masteryOrdered:  #TODO; Make this range so u can take 3 at a time
+            self.teachWord(vocabWord)
+    
+    def writeVocabWord(self, word):
+        timesWordWritten = 0
+        while timesWordWritten <= 5:
+            wordInput = input(f"please enter {word} 5 times. You have written it {timesWordWritten} amount of time\ns")
+            if wordInput == word:
+                timesWordWritten += 1
 
+    def testConnections(self, word, word2, word3):
+        wordIndex = self.data.index(word)
+        word2Index = self.data.index(word2)
+        word3Index = self.data.index(word3)
+        print("Now you will review connections, which will help you remember your words. Connections make it much more efficient and easier to use\n")
+        print(f"As a reminder, here are the connections for your words {word}: {self.connections[wordIndex]}, {word2}: {self.connections[word2Index]}, {word3}: {self.connections[word3Index]})
+    
+        
